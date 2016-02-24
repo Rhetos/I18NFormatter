@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Rhetos.I18NLocalizer</id>
+    <version>1.0.0-dev</version>
+    <authors>Omega software</authors>
+    <owners>Omega software</owners>
+    <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
+    <projectUrl>https://github.com/rhetos/rhetos</projectUrl>
+    <description>I18NLocalizer is a DSL package for Rhetos development platform. It enables localization of Rhetos aplications, using message format compatible with https://github.com/turquoiseowl/i18n.</description>
+    <copyright>Copyright Omega software 2015</copyright>
+    <tags>Rhetos</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Rhetos, Version=1.0.0-alpha160219" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="Readme.md" target="" />
+    <file src="Source\Rhetos.I18NLocalizer\bin\Debug\Rhetos.I18NLocalizer.pdb" target="Plugins" />
+    <file src="Source\Rhetos.I18NLocalizer\bin\Debug\Rhetos.I18NLocalizer.dll" target="Plugins" />
+  </files>
+</package>
