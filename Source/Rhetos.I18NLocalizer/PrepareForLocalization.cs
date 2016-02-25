@@ -30,10 +30,10 @@ namespace Rhetos.I18NLocalizer
 {
     /// <summary>
     /// This class actually does not translate the message to the end user's language.
-    /// It prepares the messages format, to allow later localization by i18n ASP.NET plugin(https://github.com/turquoiseowl/i18n).
+    /// It prepares the messages format, to allow later localization by i18n ASP.NET plugin (https://github.com/turquoiseowl/i18n).
     /// </summary>
     [Export(typeof(ILocalizer))]
-    public class I18NLocalizer : ILocalizer
+    public class PrepareForLocalization : ILocalizer
     {
         public string this[object message, params object[] args]
         {
