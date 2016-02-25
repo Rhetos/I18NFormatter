@@ -32,33 +32,45 @@ namespace GetTranslatableStrings
         {
             System.AppDomain.CurrentDomain.UnhandledException += GlobalErrorHandler;
 
-            new Program() { Parameters = new Parameters(args) }.Run();
+            new Program() { _parameters = new Parameters(args) }.Run();
         }
 
-        Parameters Parameters;
+        private Parameters _parameters;
 
         void Run()
         {
-            var files = Directory.GetFiles(Parameters.Root, "*.cs", SearchOption.AllDirectories)
-                .Where(path => !Parameters.Exclude.Any(exclude => path.Contains(exclude)))
+            var files = _parameters.Folders
+                .SelectMany(folder =>
+                    Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories)
+                    .Where(file => !_parameters.ExcludeSubstring.Any(exclude => file.Contains(exclude)))
+                    .Select(file => new { RootFolder = folder, FileRelativePath = file.Substring(folder.Length + 1) }))
+                .Concat(_parameters.Files.Select(file =>
+                    new { RootFolder = Path.GetDirectoryName(file), FileRelativePath = Path.GetFileName(file) }))
                 .ToList();
 
             LogInfo("Reading " + files.Count() + " files.");
 
             var translatables = files.SelectMany(file =>
                 {
-                    LogTrace(() => "Parsing " + file + " ...");
-                    var strings = new Parser(File.ReadAllText(file, Encoding.Default), Parameters).GetStrings();
+                    string filePath = Path.Combine(file.RootFolder, file.FileRelativePath);
+                    LogTrace(() => "Parsing " + filePath + " ...");
+                    string code = File.ReadAllText(filePath, Encoding.Default);
+                    var strings = new Parser(code, _parameters).GetStrings();
+
                     foreach (var s in strings)
-                        s.File = file;
+                    {
+                        s.RootFolder = file.RootFolder;
+                        s.FileRelativePath = file.FileRelativePath;
+                    }
 
                     int totalCount = strings.Count();
                     int translatableCount = strings.Count(s => s.Error == null);
                     if (totalCount > 0)
-                        LogTrace(() => " Found " + translatableCount + " translatable and " + (totalCount - translatableCount) + " untranslatable messages.");
+                        LogTrace(() => "  Found " + translatableCount + " translatable and " + (totalCount - translatableCount) + " untranslatable messages in the file.");
 
                     return strings;
                 }).ToList();
+            LogTrace(() => ""); // Separator.
 
             {
                 int totalCount = translatables.Count();
@@ -67,43 +79,26 @@ namespace GetTranslatableStrings
                     LogInfo("Found " + translatableCount + " translatable and " + (totalCount - translatableCount) + " untranslatable messages.");
             }
 
-            string untranslatable = string.Join("\r\n", translatables
-                .Where(t => t.Error != null)
-                .Select(t =>
-                    "\r\n#. " + t.Error
-                    + "\r\n#. " + ReportFilePosition(t)
-                    + "\r\n#. " + t.Context.Replace("\r", "").Replace("\n", "\r\n#. ")));
+            var pot = new Pot(_parameters);
 
-            string pot = string.Join("\r\n", translatables
-                .Where(t => t.Error == null)
-                .GroupBy(t => t.Text)
-                .Select(g => new { Text = g.Key, Occurrences = g.OrderBy(t => t.File).ThenBy(t => t.Line).ToList() })
-                .OrderBy(t => t.Occurrences.First().File).ThenBy(t => t.Occurrences.First().Line)
-                .Select(t =>
-                    string.Concat(t.Occurrences.Select(o => "\r\n#: " + ReportFilePosition(o)))
-                    + "\r\nmsgid " + t.Text
-                    + "\r\nmsgstr \"\""));
+            string untranslatable = pot.FormatErrors(translatables);
+            string messages = pot.FormatMessages(translatables);
 
             if (!string.IsNullOrWhiteSpace(untranslatable))
-                if (Parameters.IncludeUntranslatable)
-                    pot = untranslatable + "\r\n" + pot;
+                if (_parameters.IncludeUntranslatable)
+                    messages = untranslatable + "\r\n" + messages;
                 else
                     LogInfo(untranslatable);
 
-            if (Parameters.PotFile != null)
-                File.WriteAllText(Parameters.PotFile, pot + "\r\n", Encoding.UTF8);
+            if (_parameters.PotFile != null)
+                File.WriteAllText(_parameters.PotFile, messages + "\r\n", Encoding.UTF8);
             else
-                Console.WriteLine(pot);
-        }
-
-        private string ReportFilePosition(TranslatableString t)
-        {
-            return t.File.Substring(Parameters.Root.Length + 1) + ":" + t.Line;
+                Console.WriteLine(messages);
         }
 
         private void LogTrace(Func<string> msg)
         {
-            if (Parameters.VerboseLog)
+            if (_parameters.VerboseLog)
                 Console.Error.WriteLine(msg());
         }
 

@@ -56,7 +56,7 @@ namespace GetTranslatableStrings
 
         private void WalkSyntaxTree(List<TranslatableString> strings, SyntaxNode node, int level = 0)
         {
-            if (_parameters.VerboseLog && _stopwatch.ElapsedMilliseconds >= 1000)
+            if (_parameters.VerboseLog && _stopwatch.ElapsedMilliseconds >= 4000)
             {
                 Console.Error.WriteLine("Progress " + (node.SpanStart * 100 / _code.Length).ToString() + "%, " + node.SpanStart + "/" + _code.Length + ".");
                 _stopwatch.Restart();
@@ -77,38 +77,33 @@ namespace GetTranslatableStrings
                 WalkSyntaxTree(strings, child, level + 1);
         }
 
-        private ValueOrError<string> TryGetString(SyntaxNode node)
+        private readonly string[] names = { "localizer", "_localizer" };
+
+        private static ValueOrError<string> TryGetString(SyntaxNode node)
         {
-            if (node.Kind() == SyntaxKind.ElementAccessExpression)
-            {
-                var childNodes = node.ChildNodes().ToList();
+            return
+                TryGetStringParameter(node, new[] { "localizer", "_localizer" },
+                    SyntaxKind.ElementAccessExpression, SyntaxKind.BracketedArgumentList)
+                ?? TryGetStringParameter(node, new[] { "Rhetos.UserException", "UserException" },
+                    SyntaxKind.ObjectCreationExpression, SyntaxKind.ArgumentList);
+        }
 
-                if (childNodes.Count >= 2
-                    && childNodes[0].Kind() == SyntaxKind.IdentifierName
-                    && new[] { "localizer", "_localizer" }.Contains(childNodes[0].ToString()))
-                {
-                    if (childNodes[1].Kind() != SyntaxKind.BracketedArgumentList)
-                        return ValueOrError.CreateError("Unexpected argument '" + childNodes[1].Kind() + "', expecting " + SyntaxKind.BracketedArgumentList + ".");
-
-                    return TryGetStringParameter(childNodes[1].ChildNodes());
-                }
-            }
-
-            if (node.Kind() == SyntaxKind.ObjectCreationExpression)
+        private static ValueOrError<string> TryGetStringParameter(SyntaxNode node, string[] names, SyntaxKind kind, SyntaxKind childKind)
+        {
+            if (node.Kind() == kind)
             {
                 var childNodes = node.ChildNodes().ToList();
 
                 if (childNodes.Count >= 2
                     && (childNodes[0].Kind() == SyntaxKind.IdentifierName || childNodes[0].Kind() == SyntaxKind.QualifiedName)
-                    && new[] { "Rhetos.UserException", "UserException" }.Contains(childNodes[0].ToString()))
+                    && names.Contains(childNodes[0].ToString()))
                 {
-                    if (childNodes[1].Kind() != SyntaxKind.ArgumentList)
-                        return ValueOrError.CreateError("Unexpected argument '" + childNodes[1].Kind() + "', expecting " + SyntaxKind.ArgumentList + ".");
+                    if (childNodes[1].Kind() != childKind)
+                        return ValueOrError.CreateError("Unexpected argument '" + childNodes[1].Kind() + "', expecting " + childKind + ".");
 
                     return TryGetStringParameter(childNodes[1].ChildNodes());
                 }
             }
-
             return null;
         }
 
@@ -120,19 +115,19 @@ namespace GetTranslatableStrings
             if (firstArgument.Kind() != SyntaxKind.Argument)
                 return ValueOrError.CreateError("Unexpected child argument '" + firstArgument.Kind() + "', expecting " + SyntaxKind.Argument + ".");
 
-            var firstArgumentValue = firstArgument.ChildNodes().FirstOrDefault();
-            if (firstArgumentValue == null)
+            var firstArgumentExpression = firstArgument.ChildNodes().FirstOrDefault();
+            if (firstArgumentExpression == null)
                 return ValueOrError.CreateError("Unexpected child without arguments.");
+            if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentExpression.Kind()))
+                return ValueOrError.CreateError("Ignored " + firstArgumentExpression.Kind() + ".");
+            if (firstArgumentExpression.Kind() != SyntaxKind.StringLiteralExpression)
+                return ValueOrError.CreateError("Unsupported argument " + firstArgumentExpression.Kind() + ".");
 
-            if (firstArgumentValue.Kind() == SyntaxKind.StringLiteralExpression)
-                return firstArgumentValue.ToString();
-            else if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentValue.Kind()))
-                return ValueOrError.CreateError("Ignored " + firstArgumentValue.Kind() + ".");
-            else
-                return ValueOrError.CreateError("Unsupported argument " + firstArgumentValue.Kind() + ".");
+            var firstArgumentToken = firstArgumentExpression.ChildTokens().Single();
+            return firstArgumentToken.ValueText;
         }
 
-        private TranslatableString NewTranslatableString(SyntaxNode node)
+        private static TranslatableString NewTranslatableString(SyntaxNode node)
         {
             var position = node.SyntaxTree.GetLineSpan(node.Span).StartLinePosition;
             return new TranslatableString

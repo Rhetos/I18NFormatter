@@ -9,8 +9,9 @@ namespace GetTranslatableStrings
 {
     public class Parameters
     {
-        public readonly string Root = null;
-        public readonly List<string> Exclude = new List<string>();
+        public readonly List<string> Folders = new List<string>();
+        public readonly List<string> Files = new List<string>();
+        public readonly List<string> ExcludeSubstring = new List<string>();
         public readonly bool VerboseLog = false;
         public readonly bool IncludeUntranslatable = false;
         /// <summary>Optional.</summary>
@@ -22,13 +23,14 @@ namespace GetTranslatableStrings
             const string verboseSwitch = "-verbose";
             const string potFileSwitch = "-pot";
             const string includeUntranslatableSwitch = "-includeUntranslatable";
-            const string info = "Usage:\r\nGetTranslatableStrings.exe <source folder>"
+            const string info = "Usage:\r\nGetTranslatableStrings.exe <source folder or file ...>"
                 + " [" + excludeSwitch + " <path substring> ...]"
                 + " [" + potFileSwitch + " <output file>]"
                 + " [" + verboseSwitch + "]"
                 + " [" + includeUntranslatableSwitch + "]"
                 + "\r\n"
                 + "\r\nOptions:"
+                + "\r\n Multiple source folders or files may be provided."
                 + "\r\n " + excludeSwitch + "  Exclude paths containing the substring. May be used multiple times."
                 + "\r\n " + potFileSwitch + "  Output translation template to file. Standard output is used if undefined."
                 + "\r\n " + verboseSwitch + "  Detailed logging."
@@ -44,7 +46,7 @@ namespace GetTranslatableStrings
             {
                 if (nextArgument == NextArgument.Exclude)
                 {
-                    Exclude.Add(arg);
+                    ExcludeSubstring.Add(arg);
                     nextArgument = NextArgument.Undefined;
                 }
                 else if (nextArgument == NextArgument.PotFile)
@@ -57,14 +59,7 @@ namespace GetTranslatableStrings
                     if (nextArgument != NextArgument.Undefined)
                         throw new ApplicationException("Internal error: Unexpected argument type '" + nextArgument + "'.\r\n\r\n" + info);
 
-                    if (!arg.StartsWith("-"))
-                    {
-                        if (Root == null)
-                            Root = Path.GetFullPath(arg);
-                        else
-                            throw new ApplicationException("Unexpected parameter '" + arg + "'.\r\n\r\n" + info);
-                    }
-                    else if (arg.Equals(excludeSwitch, StringComparison.InvariantCultureIgnoreCase))
+                    if (arg.Equals(excludeSwitch, StringComparison.InvariantCultureIgnoreCase))
                         nextArgument = NextArgument.Exclude;
                     else if (arg.Equals(verboseSwitch, StringComparison.InvariantCultureIgnoreCase))
                         VerboseLog = true;
@@ -72,8 +67,12 @@ namespace GetTranslatableStrings
                         IncludeUntranslatable = true;
                     else if (arg.Equals(potFileSwitch, StringComparison.InvariantCultureIgnoreCase))
                         nextArgument = NextArgument.PotFile;
+                    else if (Directory.Exists(arg))
+                        Folders.Add(Path.GetFullPath(arg));
+                    else if (arg.EndsWith(".cs") && File.Exists(arg))
+                        Files.Add(Path.GetFullPath(arg));
                     else
-                        throw new ApplicationException("Unexpected parameter '" + arg + "'.\r\n\r\n" + info);
+                        throw new ApplicationException("Unexpected parameter '" + arg + "'. It is not a valid folder, C# file or option.\r\n\r\n" + info);
                 }
             }
 
@@ -83,15 +82,20 @@ namespace GetTranslatableStrings
             if (nextArgument == NextArgument.PotFile)
                 throw new ApplicationException("Missing file name after '" + potFileSwitch + "'.\r\n\r\n" + info);
 
-            if (Root == null)
-                throw new ApplicationException("Missing source folder parameter.\r\n\r\n" + info);
+            if (Folders.Count() == 0 && Files.Count() == 0)
+                throw new ApplicationException("Missing source folder or file parameter.\r\n\r\n" + info);
 
             if (VerboseLog)
             {
-                Console.Error.WriteLine("Root: " + Root);
-                for (int i = 0; i < Exclude.Count; i++)
-                    Console.Error.WriteLine("Exclude " + (i + 1) + ": *" + Exclude[i] + "*");
-                Console.Error.WriteLine(".pot file: " + (PotFile ?? "using stanard output"));
+                Console.Error.WriteLine("Parameters:");
+                for (int i = 0; i < Folders.Count; i++)
+                    Console.Error.WriteLine("  Source folder " + (i + 1) + ": " + Folders[i]);
+                for (int i = 0; i < Files.Count; i++)
+                    Console.Error.WriteLine("  Source file " + (i + 1) + ": " + Files[i]);
+                for (int i = 0; i < ExcludeSubstring.Count; i++)
+                    Console.Error.WriteLine("  Exclude " + (i + 1) + ": *" + ExcludeSubstring[i] + "*");
+                Console.Error.WriteLine("  POT file: " + (PotFile ?? "using stanard output"));
+                Console.Error.WriteLine();
             }
         }
         enum NextArgument { Undefined, Exclude, PotFile };

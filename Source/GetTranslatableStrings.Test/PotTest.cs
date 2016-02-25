@@ -17,27 +17,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GetTranslatableStrings
+namespace GetTranslatableStrings.Test
 {
-    [DebuggerDisplay("{Context}")]
-    public class TranslatableString
+    [TestClass]
+    public class PotTest
     {
-        // Either Text or Error should be set:
-        public string Text;
-        public string Error;
-
-        // Context:
-        public string RootFolder;
-        public string FileRelativePath;
-        public int Line;
-        public int Column;
-        public string Context;
+        [TestMethod]
+        public void EscapeTest()
+        {
+            Assert.AreEqual(@"""1\t2\r\n""", Pot.QuoteEscapeString("1\t2\r\n"));
+        }
     }
 }
