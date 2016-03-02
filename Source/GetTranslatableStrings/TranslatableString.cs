@@ -26,7 +26,6 @@ using System.Threading.Tasks;
 
 namespace GetTranslatableStrings
 {
-    [DebuggerDisplay("{Context}")]
     public class TranslatableString
     {
         // Either Text or Error should be set:
@@ -39,5 +38,10 @@ namespace GetTranslatableStrings
         public int Line;
         public int Column;
         public string Context;
+
+        public override string ToString()
+        {
+            return Context;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace GetTranslatableStrings.Test
     {
         List<TranslatableString> Parse(string code)
         {
-            var testParameters = new Parameters(new[] { "TestFolder" });
+            var testParameters = new Parameters(new[] { "." });
             var testParser = new Parser(code, testParameters);
             return testParser.GetStrings();
         }
@@ -68,6 +68,19 @@ namespace GetTranslatableStrings.Test
             Assert.AreEqual(
                 string.Join("|", tests.Values),
                 string.Join("|", translatables.Select(t => t.Text)));
+        }
+
+        [TestMethod]
+        public void ParseAlreadyInternationalized()
+        {
+            var t = Parse("int main()\n{ string localized = \"a\"; new UserException(localized); }").Single();
+            Assert.AreEqual("Ignored, already internationalized.", t.Error);
+
+            t = Parse("int main()\n{ new UserException(\"[[[abc]]]\"); }").Single();
+            Assert.AreEqual("Ignored, already internationalized.", t.Error);
+
+            t = Parse("int main()\n{ _localizer[\"[[[abc]]]\"]; }").Single();
+            Assert.AreEqual("Ignored, already internationalized.", t.Error);
         }
     }
 }

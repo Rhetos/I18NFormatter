@@ -120,11 +120,19 @@ namespace GetTranslatableStrings
                 return ValueOrError.CreateError("Unexpected child without arguments.");
             if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentExpression.Kind()))
                 return ValueOrError.CreateError("Ignored " + firstArgumentExpression.Kind() + ".");
+            if ((firstArgumentExpression.Kind() == SyntaxKind.IdentifierName || firstArgumentExpression.Kind() == SyntaxKind.IdentifierName)
+                && firstArgumentExpression.ToString().StartsWith("localized"))
+                return ValueOrError.CreateError("Ignored, already internationalized.");
             if (firstArgumentExpression.Kind() != SyntaxKind.StringLiteralExpression)
                 return ValueOrError.CreateError("Unsupported argument " + firstArgumentExpression.Kind() + ".");
 
             var firstArgumentToken = firstArgumentExpression.ChildTokens().Single();
-            return firstArgumentToken.ValueText;
+            string text = firstArgumentToken.ValueText;
+
+            if (text.StartsWith("[[[") && text.EndsWith("]]]"))
+                return ValueOrError.CreateError("Ignored, already internationalized.");
+
+            return text;
         }
 
         private static TranslatableString NewTranslatableString(SyntaxNode node)
