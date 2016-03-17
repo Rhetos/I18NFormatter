@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (C) 2016 Omega software d.o.o.
+    Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
 
@@ -43,9 +43,16 @@ namespace GetTranslatableStrings
                 .SelectMany(folder =>
                     Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories)
                     .Where(file => !_parameters.ExcludeSubstring.Any(exclude => file.Contains(exclude)))
-                    .Select(file => new { RootFolder = folder, FileRelativePath = file.Substring(folder.Length + 1) }))
-                .Concat(_parameters.Files.Select(file =>
-                    new { RootFolder = Path.GetDirectoryName(file), FileRelativePath = Path.GetFileName(file) }))
+                    .Select(file => new
+                    {
+                        RootFolder = folder,
+                        FileRelativePath = file.Substring(folder.Length + 1)
+                    }))
+                .Concat(_parameters.Files.Select(file => new
+                {
+                    RootFolder = Path.GetDirectoryName(file),
+                    FileRelativePath = Path.GetFileName(file)
+                }))
                 .ToList();
 
             LogInfo("Reading " + files.Count() + " files.");

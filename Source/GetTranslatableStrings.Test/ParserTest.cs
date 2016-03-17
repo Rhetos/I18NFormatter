@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (C) 2016 Omega software d.o.o.
+    Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
 
@@ -81,6 +81,13 @@ namespace GetTranslatableStrings.Test
 
             t = Parse("int main()\n{ _localizer[\"[[[abc]]]\"]; }").Single();
             Assert.AreEqual("Ignored, already internationalized.", t.Error);
+        }
+
+        [TestMethod]
+        public void ParseIgnoreTests()
+        {
+            var t = Parse("int main()\n{ new UserException(\"some [Test] code\"); }").Single();
+            Assert.AreEqual("Ignored test.", t.Error);
         }
     }
 }

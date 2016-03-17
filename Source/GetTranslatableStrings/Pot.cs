@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (C) 2016 Omega software d.o.o.
+    Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
 
@@ -47,7 +47,7 @@ namespace GetTranslatableStrings
                 .Select(t =>
                     "\r\n#. " + t.Error
                     + "\r\n#. " + MultilineComment(t.Context)
-                    + string.Concat(t.Occurrences.Select(o => "\r\n#: " + ReportFilePosition(o)))));
+                    + FormatFilePositions(t.Occurrences)));
         }
 
         public string FormatMessages(IEnumerable<TranslatableString> translatables)
@@ -58,9 +58,19 @@ namespace GetTranslatableStrings
                 .Select(group => new { Text = group.Key, Occurrences = group.OrderBy(t => t, _sortByFileAndLine).ToList() })
                 .OrderBy(t => t.Occurrences.First(), _sortByFileAndLine)
                 .Select(t =>
-                    string.Concat(t.Occurrences.Select(o => "\r\n#: " + ReportFilePosition(o)))
+                    FormatFilePositions(t.Occurrences)
                     + "\r\nmsgid " + QuoteEscapeString(t.Text)
                     + "\r\nmsgstr \"\""));
+        }
+
+        private string FormatFilePositions(IList<TranslatableString> occurrences)
+        {
+            string multipleOccurrencesWarning = "";
+            if (occurrences.Count() > 1)
+                multipleOccurrencesWarning = "\r\n#. " + occurrences.Count() + " occurrences.";
+
+            var occurrencePerFile = occurrences.GroupBy(o => o.FileRelativePath).Select(og => og.OrderBy(t => t, _sortByFileAndLine).First());
+            return multipleOccurrencesWarning + string.Concat(occurrencePerFile.Select(o => "\r\n#: " + ReportFilePosition(o)));
         }
 
         static readonly IComparer<TranslatableString> _sortByFileAndLine = new SortByFileAndLine();

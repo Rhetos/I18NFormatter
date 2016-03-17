@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (C) 2016 Omega software d.o.o.
+    Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
 
@@ -123,6 +123,8 @@ namespace GetTranslatableStrings
             if ((firstArgumentExpression.Kind() == SyntaxKind.IdentifierName || firstArgumentExpression.Kind() == SyntaxKind.IdentifierName)
                 && firstArgumentExpression.ToString().StartsWith("localized"))
                 return ValueOrError.CreateError("Ignored, already internationalized.");
+            if (firstArgumentExpression.ToString().IndexOf("[Test]", StringComparison.OrdinalIgnoreCase) >= 0)
+                return ValueOrError.CreateError("Ignored test.");
             if (firstArgumentExpression.Kind() != SyntaxKind.StringLiteralExpression)
                 return ValueOrError.CreateError("Unsupported argument " + firstArgumentExpression.Kind() + ".");
 
