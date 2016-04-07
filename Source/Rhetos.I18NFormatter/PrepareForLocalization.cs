@@ -35,6 +35,8 @@ namespace Rhetos.I18NFormatter
     [Export(typeof(ILocalizer))]
     public class PrepareForLocalization : ILocalizer
     {
+        private static readonly Regex _tagsRegex = new Regex(@"{(\d+)}");
+
         public string this[object message, params object[] args]
         {
             get
@@ -42,14 +44,13 @@ namespace Rhetos.I18NFormatter
                 string text = message.ToString();
 
                 // Check if the message is already formatted:
-                if (text.StartsWith("[[[") && text.EndsWith("]]]"))
+                if (text.Contains("]]]"))
                     return text;
 
                 // Convert string.Format parameters convention "{0}" with i18n convention "%0":
-                var tagsRegex = new Regex(@"{(\d+)}");
-                text = tagsRegex.Replace(text, "%$1");
+                text = _tagsRegex.Replace(text, "%$1");
 
-                // Evaluate parameters:
+                // Append message parameters:
                 var parameters = new StringBuilder();
                 if (args != null && args.Length > 0)
                     foreach (object arg in args)

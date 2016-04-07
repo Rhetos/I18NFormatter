@@ -85,7 +85,8 @@ namespace GetTranslatableStrings
                 TryGetStringParameter(node, new[] { "localizer", "_localizer" },
                     SyntaxKind.ElementAccessExpression, SyntaxKind.BracketedArgumentList)
                 ?? TryGetStringParameter(node, new[] { "Rhetos.UserException", "UserException" },
-                    SyntaxKind.ObjectCreationExpression, SyntaxKind.ArgumentList);
+                    SyntaxKind.ObjectCreationExpression, SyntaxKind.ArgumentList)
+                ?? TryGetStringAssignment(node, "invalidData_Description");
         }
 
         private static ValueOrError<string> TryGetStringParameter(SyntaxNode node, string[] names, SyntaxKind kind, SyntaxKind childKind)
@@ -101,37 +102,50 @@ namespace GetTranslatableStrings
                     if (childNodes[1].Kind() != childKind)
                         return ValueOrError.CreateError("Unexpected argument '" + childNodes[1].Kind() + "', expecting " + childKind + ".");
 
-                    return TryGetStringParameter(childNodes[1].ChildNodes());
+                    var firstArgument = childNodes[1].ChildNodes().FirstOrDefault();
+                    if (firstArgument == null)
+                        return ValueOrError.CreateError("Unexpected usage without arguments.");
+                    if (firstArgument.Kind() != SyntaxKind.Argument)
+                        return ValueOrError.CreateError("Unexpected child argument '" + firstArgument.Kind() + "', expecting " + SyntaxKind.Argument + ".");
+
+                    var firstArgumentExpression = firstArgument.ChildNodes().FirstOrDefault();
+                    if (firstArgumentExpression == null)
+                        return ValueOrError.CreateError("Unexpected child without arguments.");
+                    if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentExpression.Kind()))
+                        return ValueOrError.CreateError("Ignored " + firstArgumentExpression.Kind() + ".");
+                    if ((firstArgumentExpression.Kind() == SyntaxKind.IdentifierName || firstArgumentExpression.Kind() == SyntaxKind.IdentifierName)
+                        && firstArgumentExpression.ToString().StartsWith("localized"))
+                        return ValueOrError.CreateError("Ignored, already internationalized.");
+
+                    return TryGetTextValue(firstArgumentExpression, "argument");
                 }
             }
             return null;
         }
 
-        private static ValueOrError<string> TryGetStringParameter(IEnumerable<SyntaxNode> messageArguments)
+        private static ValueOrError<string> TryGetStringAssignment(SyntaxNode node, string variableName)
         {
-            var firstArgument = messageArguments.FirstOrDefault();
-            if (firstArgument == null)
-                return ValueOrError.CreateError("Unexpected usage without arguments.");
-            if (firstArgument.Kind() != SyntaxKind.Argument)
-                return ValueOrError.CreateError("Unexpected child argument '" + firstArgument.Kind() + "', expecting " + SyntaxKind.Argument + ".");
+            if (node.Kind() == SyntaxKind.VariableDeclarator)
+            {
+                var declarator = (VariableDeclaratorSyntax)node;
+                if (declarator.Identifier.ValueText == "invalidData_Description")
+                    return TryGetTextValue(declarator.Initializer.Value, "initializer");
+            }
+            return null;
+        }
 
-            var firstArgumentExpression = firstArgument.ChildNodes().FirstOrDefault();
-            if (firstArgumentExpression == null)
-                return ValueOrError.CreateError("Unexpected child without arguments.");
-            if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentExpression.Kind()))
-                return ValueOrError.CreateError("Ignored " + firstArgumentExpression.Kind() + ".");
-            if ((firstArgumentExpression.Kind() == SyntaxKind.IdentifierName || firstArgumentExpression.Kind() == SyntaxKind.IdentifierName)
-                && firstArgumentExpression.ToString().StartsWith("localized"))
-                return ValueOrError.CreateError("Ignored, already internationalized.");
-            if (firstArgumentExpression.ToString().IndexOf("[Test]", StringComparison.OrdinalIgnoreCase) >= 0)
+        private static ValueOrError<string> TryGetTextValue(SyntaxNode textValue, string errorContext)
+        {
+            if (textValue.ToString().IndexOf("[Test]", StringComparison.OrdinalIgnoreCase) >= 0)
                 return ValueOrError.CreateError("Ignored test.");
-            if (firstArgumentExpression.Kind() != SyntaxKind.StringLiteralExpression)
-                return ValueOrError.CreateError("Unsupported argument " + firstArgumentExpression.Kind() + ".");
 
-            var firstArgumentToken = firstArgumentExpression.ChildTokens().Single();
-            string text = firstArgumentToken.ValueText;
+            if (textValue.Kind() != SyntaxKind.StringLiteralExpression)
+                return ValueOrError.CreateError("Unsupported " + errorContext + " " + textValue.Kind() + ".");
 
-            if (text.StartsWith("[[[") && text.EndsWith("]]]"))
+            var textValueToken = textValue.ChildTokens().Single();
+            string text = textValueToken.ValueText;
+
+            if (text.Contains("]]]"))
                 return ValueOrError.CreateError("Ignored, already internationalized.");
 
             return text;
