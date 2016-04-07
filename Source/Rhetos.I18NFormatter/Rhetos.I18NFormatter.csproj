@@ -7,8 +7,8 @@
     <ProjectGuid>{23542C0B-88DF-452D-B311-D0F68039A0DE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rhetos.I18NLocalizer</RootNamespace>
-    <AssemblyName>Rhetos.I18NLocalizer</AssemblyName>
+    <RootNamespace>Rhetos.I18NFormatter</RootNamespace>
+    <AssemblyName>Rhetos.I18NFormatter</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

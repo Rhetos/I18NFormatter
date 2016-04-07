@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NLocalizer", "Source\Rhetos.I18NLocalizer\Rhetos.I18NLocalizer.csproj", "{23542C0B-88DF-452D-B311-D0F68039A0DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NFormatter", "Source\Rhetos.I18NFormatter\Rhetos.I18NFormatter.csproj", "{23542C0B-88DF-452D-B311-D0F68039A0DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetTranslatableStrings.Test", "Source\GetTranslatableStrings.Test\GetTranslatableStrings.Test.csproj", "{2B3B51F3-D9EA-4CEC-B72D-0F036BC4562D}"
 EndProject

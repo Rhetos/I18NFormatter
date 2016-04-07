@@ -26,7 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Rhetos.I18NLocalizer
+namespace Rhetos.I18NFormatter
 {
     /// <summary>
     /// This class actually does not translate the message to the end user's language.
