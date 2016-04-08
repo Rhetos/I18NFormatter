@@ -7,7 +7,7 @@
     <owners>Omega software</owners>
     <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
     <projectUrl>https://github.com/rhetos/rhetos</projectUrl>
-    <description>I18NFormatter is a DSL package for Rhetos development platform. It enables localization of Rhetos aplications, using message format compatible with https://github.com/turquoiseowl/i18n.</description>
+    <description>I18NFormatter is a plugin for Rhetos development platform. It enables localization of Rhetos applications, using message format compatible with https://github.com/turquoiseowl/i18n.</description>
     <copyright>Copyright Omega software 2015</copyright>
     <tags>Rhetos</tags>
     <frameworkAssemblies>
