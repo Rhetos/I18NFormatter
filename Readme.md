@@ -5,7 +5,7 @@ It enables localization of Rhetos applications, using message format compatible 
 ## Rhetos.I18NFormatter
 
 This plugin does not translate the message to the end user's language.
-It formats the messages, keeping the massage parameters separate from the main message structure,
+It formats the messages, keeping the message parameters separate from the main message structure,
 to allow later localization by adding [i18n ASP.NET plugin](https://github.com/turquoiseowl/i18n) to the web server.
 
 ## GetTranslatableStrings

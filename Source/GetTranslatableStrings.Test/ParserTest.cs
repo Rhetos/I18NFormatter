@@ -89,5 +89,13 @@ namespace GetTranslatableStrings.Test
             var t = Parse("int main()\n{ new UserException(\"some [Test] code\"); }").Single();
             Assert.AreEqual("Ignored test.", t.Error);
         }
+
+        [TestMethod]
+        public void CustomInvalidDataMessage()
+        {
+            var translatable = Parse("int main()\n{ new InvalidDataMessage { ID = Guid.NewGuid(), Message = \"Invalid {0} because {1}.\", MessageParameters = new object[] { 1, 2 } }; }").Single();
+            Assert.AreEqual("Invalid {0} because {1}.", translatable.Text);
+        }
+
     }
 }
