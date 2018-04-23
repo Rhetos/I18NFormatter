@@ -41,7 +41,7 @@
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.1.1\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Rhetos.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Rhetos.Utilities">
       <HintPath>..\..\packages\Rhetos.1.0.0\lib\net451\Rhetos.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
