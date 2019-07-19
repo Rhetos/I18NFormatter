@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NFormatter", "Source\Rhetos.I18NFormatter\Rhetos.I18NFormatter.csproj", "{23542C0B-88DF-452D-B311-D0F68039A0DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetTranslatableStrings.Test", "Source\GetTranslatableStrings.Test\GetTranslatableStrings.Test.csproj", "{2B3B51F3-D9EA-4CEC-B72D-0F036BC4562D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetTranslatableStrings", "Source\GetTranslatableStrings\GetTranslatableStrings.csproj", "{491E2790-D305-4175-82D0-E0B0DE4DBEE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NFormatter.Test", "Source\Rhetos.I18NFormatter.Test\Rhetos.I18NFormatter.Test.csproj", "{D8CA95D1-1043-4D6F-B131-63FD60536738}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{491E2790-D305-4175-82D0-E0B0DE4DBEE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{491E2790-D305-4175-82D0-E0B0DE4DBEE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{491E2790-D305-4175-82D0-E0B0DE4DBEE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFD7B25A-C36E-4E38-9431-0C067EA33712}
 	EndGlobalSection
 EndGlobal
