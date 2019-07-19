@@ -54,7 +54,7 @@ namespace Rhetos.I18NFormatter
                 var parameters = new StringBuilder();
                 if (args != null && args.Length > 0)
                     foreach (object arg in args)
-                        parameters.Append("|||").Append(arg.ToString());
+                        parameters.Append("|||").Append(arg);
 
                 return "[[[" + text + parameters.ToString() + "]]]";
             }
