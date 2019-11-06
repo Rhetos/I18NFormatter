@@ -61,7 +61,7 @@ namespace GetTranslatableStrings
                 {
                     string filePath = Path.Combine(file.RootFolder, file.FileRelativePath);
                     LogTrace(() => "Parsing " + filePath + " ...");
-                    string code = File.ReadAllText(filePath, Encoding.Default);
+                    string code = File.ReadAllText(filePath);
                     var strings = new Parser(code, _parameters).GetStrings();
 
                     foreach (var s in strings)
