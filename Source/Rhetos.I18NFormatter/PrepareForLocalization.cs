@@ -18,13 +18,9 @@
 */
 
 using Rhetos.Utilities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Rhetos.I18NFormatter
 {

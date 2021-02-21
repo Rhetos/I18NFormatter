@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Rhetos.I18NFormatter</id>
-    <version>1.2.0-dev</version>
+    <version>5.0.0-dev</version>
     <authors>Omega software</authors>
     <owners>Omega software</owners>
     <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
@@ -11,13 +11,13 @@
     <copyright>Copyright Omega software 2015</copyright>
     <tags>Rhetos plugin</tags>
     <dependencies>
-      <dependency id="Rhetos" version="1.0.0" />
+      <dependency id="Rhetos" version="5.0.0-dev" />
     </dependencies>
   </metadata>
   <files>
     <file src="Readme.md" target="" />
     <file src="ChangeLog.md" target="" />
-    <file src="Source\Rhetos.I18NFormatter\bin\Debug\Rhetos.I18NFormatter.pdb" target="lib\net451" />
-    <file src="Source\Rhetos.I18NFormatter\bin\Debug\Rhetos.I18NFormatter.dll" target="lib\net451" />
+    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.pdb" target="lib\net5.0" />
+    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.dll" target="lib\net5.0" />
   </files>
 </package>
