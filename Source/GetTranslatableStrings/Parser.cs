@@ -25,8 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GetTranslatableStrings
 {
@@ -34,7 +32,7 @@ namespace GetTranslatableStrings
     {
         private readonly string _code;
         private readonly Parameters _parameters;
-        private Stopwatch _stopwatch;
+        private readonly Stopwatch _stopwatch;
 
         public Parser(string code, Parameters parameters)
         {
