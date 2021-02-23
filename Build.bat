@@ -12,11 +12,8 @@ WHERE /Q NuGet.exe || ECHO ERROR: Please download the NuGet.exe command line too
 
 CALL Tools\Build\FindVisualStudio.bat || GOTO Error0
 
-MSBuild "Source\GetTranslatableStrings\GetTranslatableStrings.csproj" /target:rebuild /p:Configuration=%Config% || GOTO Error0
-MSBuild "Source\GetTranslatableStrings.Test\GetTranslatableStrings.Test.csproj" /target:rebuild /p:Configuration=%Config% || GOTO Error0
-
-dotnet build "Source\Rhetos.I18NFormatter\Rhetos.I18NFormatter.csproj" --configuration %Config% || GOTO Error0
-dotnet build "Source\Rhetos.I18NFormatter.Test\Rhetos.I18NFormatter.Test.csproj" --configuration %Config% || GOTO Error0
+nuget restore -NonInteractive || GOTO Error0
+MSBuild /t:restore /t:rebuild /p:Configuration=%Config% /verbosity:minimal /fileLogger || GOTO Error0
 
 IF NOT EXIST Install\ MD Install
 DEL /F /S /Q Install\* || GOTO Error0
