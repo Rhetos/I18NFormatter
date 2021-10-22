@@ -7,7 +7,9 @@ It enables localization of Rhetos applications, using message format compatible 
 
 1. You can still use turquoiseowl/i18n if you have the localization implemented in a **separate "frontend" app, for example on ASP.NET MVC**, that acts as a proxy for Rhetos REST services. In that case, add Rhetos.I18NFormatter package to the Rhetos app in order to make its messages formatted for localization that occurs in the frontend app.
 2. If you want **localization implemented directly in the Rhetos app**, instead of I18NFormatter package and turquoiseowl/i18n, use any ASP.NET Core localization utility, by configuring Rhetos host with `.AddHostLocalization()`.
-   * To use localization with "PO files" (compatible with turquoiseowl/i18n), see [Microsoft's recommendations for OrchardCore](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/portable-object-localization?view=aspnetcore-5.0), and the usage [example](https://github.com/Rhetos/Bookstore/pull/17/files) in Bookstore Rhetos app.
+   * To use localization with "PO files" (compatible with turquoiseowl/i18n),
+     see [Microsoft's recommendations for OrchardCore](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/portable-object-localization?view=aspnetcore-5.0),
+     and the usage example in Rhetos tutorial: [Adding localization](https://github.com/Rhetos/Rhetos.Samples.AspNet/#adding-localization).
 
 ## Features
 
