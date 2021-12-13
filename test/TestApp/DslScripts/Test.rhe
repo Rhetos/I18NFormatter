@@ -1,0 +1,7 @@
+﻿Module Test
+{
+	Entity Simple
+	{
+		ShortString Name { Required; Unique; }
+	}
+}

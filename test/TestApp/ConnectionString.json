@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "RhetosConnectionString": "Data Source=localhost;Initial Catalog=RhetosI18N;Integrated Security=SSPI;"
+  }
+}

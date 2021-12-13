@@ -12,7 +12,7 @@ WHERE /Q NuGet.exe || ECHO ERROR: Please download the NuGet.exe command line too
 
 CALL Tools\Build\FindVisualStudio.bat || GOTO Error0
 
-MSBuild /t:restore /t:rebuild /p:Configuration=%Config% /verbosity:minimal /fileLogger || GOTO Error0
+MSBuild /t:restore /t:rebuild /p:Configuration=%Config% /p:RhetosDeploy=false /verbosity:minimal /fileLogger || GOTO Error0
 
 IF NOT EXIST Install\ MD Install
 DEL /F /S /Q Install\* || GOTO Error0

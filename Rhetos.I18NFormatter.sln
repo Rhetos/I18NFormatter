@@ -1,15 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NFormatter", "Source\Rhetos.I18NFormatter\Rhetos.I18NFormatter.csproj", "{23542C0B-88DF-452D-B311-D0F68039A0DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhetos.I18NFormatter", "Source\Rhetos.I18NFormatter\Rhetos.I18NFormatter.csproj", "{23542C0B-88DF-452D-B311-D0F68039A0DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetTranslatableStrings.Test", "Source\GetTranslatableStrings.Test\GetTranslatableStrings.Test.csproj", "{2B3B51F3-D9EA-4CEC-B72D-0F036BC4562D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetTranslatableStrings", "Source\GetTranslatableStrings\GetTranslatableStrings.csproj", "{491E2790-D305-4175-82D0-E0B0DE4DBEE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhetos.I18NFormatter.Test", "Source\Rhetos.I18NFormatter.Test\Rhetos.I18NFormatter.Test.csproj", "{D8CA95D1-1043-4D6F-B131-63FD60536738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhetos.I18NFormatter.Test", "Source\Rhetos.I18NFormatter.Test\Rhetos.I18NFormatter.Test.csproj", "{D8CA95D1-1043-4D6F-B131-63FD60536738}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6EF1A649-CFE8-4BBE-A92B-B1455D4C032F}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Build.bat = Build.bat
+		ChangeLog.md = ChangeLog.md
+		ChangeVersion.ps1 = ChangeVersion.ps1
+		Clean.bat = Clean.bat
+		Directory.Build.props = Directory.Build.props
+		Readme.md = Readme.md
+		Rhetos.I18NFormatter.nuspec = Rhetos.I18NFormatter.nuspec
+		Test.bat = Test.bat
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "test\TestApp\TestApp.csproj", "{3E7B3916-7AD6-496C-AC91-7A722B521F7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +48,10 @@ Global
 		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8CA95D1-1043-4D6F-B131-63FD60536738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E7B3916-7AD6-496C-AC91-7A722B521F7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E7B3916-7AD6-496C-AC91-7A722B521F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E7B3916-7AD6-496C-AC91-7A722B521F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E7B3916-7AD6-496C-AC91-7A722B521F7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
