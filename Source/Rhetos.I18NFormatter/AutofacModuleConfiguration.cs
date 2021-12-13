@@ -21,13 +21,15 @@ using Autofac;
 using Rhetos.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Rhetos.I18NFormatter
 {
-    class AutofacModuleConfiguration : Module
+    [Export(typeof(Module))]
+    public class AutofacModuleConfiguration : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -38,6 +40,8 @@ namespace Rhetos.I18NFormatter
             builder.RegisterGeneric(typeof(PrepareForLocalization<>))
                 .As(typeof(ILocalizer<>))
                 .SingleInstance();
+
+            builder.Register(context => context.Resolve<IConfiguration>().GetOptions<I18NFormatterOptions>()).SingleInstance();
 
             base.Load(builder);
         }

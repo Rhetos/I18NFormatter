@@ -86,10 +86,18 @@ namespace Rhetos.I18NFormatter
                 foreach (object arg in args)
                 {
                     result.Append("|||");
-                    if (arg is TokenizedString tokenizedArgument && !tokenizedArgument.HadArguments)
-                        result.Append($"((({tokenizedArgument.Name})))"); // Special token syntax for localization of message parameters.
-                    else if (arg is TokenizedString)
-                        throw new ArgumentException("Only simple localized message parameters are supported: Localized message parameters cannot have additional inner parameters.");
+                    if (arg is TokenizedString tokenizedArgument)
+                    {
+                        if (!tokenizedArgument.HadArguments)
+                        {
+                            if (_options.LocalizeParameters)
+                                result.Append($"((({tokenizedArgument.Name})))"); // Special token syntax for localization of message parameters.
+                            else
+                                result.Append($"{tokenizedArgument.Name}"); // Parameter localization disabled for backward compatibility.
+                        }
+                        else
+                            throw new ArgumentException("Only simple localized message parameters are supported: Localized message parameters cannot have additional inner parameters.");
+                    }
                     else
                         result.Append(arg); // Exact parameter text that should not be localized.
                 }
