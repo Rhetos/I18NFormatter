@@ -59,7 +59,7 @@ namespace Rhetos.I18NFormatter.Test
         [TestMethod]
         public void LocalizedParameters()
         {
-            var localizer = new PrepareForLocalization(new I18NFormatterOptions());
+            var localizer = new PrepareForLocalization(new I18NFormatterOptions { LocalizeParameters = true });
 
             string message = "User {0} should not change {1} in {2}.";
 
@@ -80,9 +80,32 @@ namespace Rhetos.I18NFormatter.Test
         }
 
         [TestMethod]
+        public void LocalizedParametersDisabled()
+        {
+            var localizer = new PrepareForLocalization(new I18NFormatterOptions { LocalizeParameters = false });
+
+            string message = "User {0} should not change {1} in {2}.";
+
+            object[] args = new object[]
+            {
+                "SomeUserName", // Some parameters should not be translated.
+                localizer["SomeProperty"],
+                localizer["SomeModule.SomeEntity"],
+            };
+
+            Assert.AreEqual(
+                "[[[User %0 should not change %1 in %2." +
+                    "|||SomeUserName" +
+                    "|||SomeProperty" +
+                    "|||SomeModule.SomeEntity" +
+                    "]]]",
+                localizer[message, args]);
+        }
+
+        [TestMethod]
         public void LocalizedParametersWithInnerArguments()
         {
-            var localizer = new PrepareForLocalization(new I18NFormatterOptions());
+            var localizer = new PrepareForLocalization(new I18NFormatterOptions { LocalizeParameters = true });
 
             string message = "Message {0}";
             object[] args = new object[]
@@ -99,7 +122,7 @@ namespace Rhetos.I18NFormatter.Test
         public void MessageContextDisabled()
         {
             var localizer = new PrepareForLocalization<TestModule.TestEntity>(
-                new I18NFormatterOptions { AddMessageContext = false });
+                new I18NFormatterOptions { LocalizeParameters = true, AddMessageContext = false });
 
             Assert.AreEqual("[[[ab]]]", localizer["ab"]);
         }
@@ -108,7 +131,7 @@ namespace Rhetos.I18NFormatter.Test
         public void MessageContextEnabled()
         {
             var localizer = new PrepareForLocalization<TestModule.TestEntity>(
-                new I18NFormatterOptions { AddMessageContext = true });
+                new I18NFormatterOptions { LocalizeParameters = true, AddMessageContext = true });
 
             Assert.AreEqual("[[[ab///TestModule.TestEntity]]]", localizer["ab"]);
         }
