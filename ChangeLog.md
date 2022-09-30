@@ -7,6 +7,7 @@
   * I18NFormatter can still be useful in a Rhetos app, if a separate ASP.NET MVC application localizes messages with turquoiseowl/i18n.
   * If the localization is needed directly in the Rhetos app, use any ASP.NET Core localization utility instead of this plugin. See [Readme.md](Readme.md) for more info.
 * GetTranslatableStrings reads source files with UTF-8 encoding by default.
+* **Breaking changes**: If migrating from turquoiseowl/i18n to **OrchardCore**, you will need to replace the message parameters in .po files: from `%0, %1, ...` to `{0}, {1}, ...`
 
 ## 1.1.0 (2019-09-09)
 

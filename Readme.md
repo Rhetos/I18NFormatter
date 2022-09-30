@@ -10,6 +10,7 @@ It enables localization of Rhetos applications, using message format compatible 
    * To use localization with "PO files" (compatible with turquoiseowl/i18n),
      see [Microsoft's recommendations for OrchardCore](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/portable-object-localization?view=aspnetcore-5.0),
      and the usage example in Rhetos tutorial: [Adding localization](https://github.com/Rhetos/Rhetos.Samples.AspNet/#adding-localization).
+   * If migrating from turquoiseowl/i18n to **OrchardCore**, you will need to replace the message parameters in .po files: from `%0, %1, ...` to `{0}, {1}, ...`
 
 ## Features
 
