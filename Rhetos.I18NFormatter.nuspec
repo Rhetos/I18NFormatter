@@ -12,13 +12,15 @@
     <copyright>Copyright Omega software 2015</copyright>
     <tags>Rhetos plugin</tags>
     <dependencies>
-      <dependency id="Rhetos" version="5.0.0" />
+      <group targetFramework="net8.0">
+        <dependency id="Rhetos" version="6.0.0" />
+      </group>
     </dependencies>
   </metadata>
   <files>
     <file src="Readme.md" target="docs" />
     <file src="ChangeLog.md" target="" />
-    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.pdb" target="lib\net5.0" />
-    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.dll" target="lib\net5.0" />
+    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net8.0\Rhetos.I18NFormatter.pdb" target="lib\net8.0" />
+    <file src="Source\Rhetos.I18NFormatter\bin\Debug\net8.0\Rhetos.I18NFormatter.dll" target="lib\net8.0" />
   </files>
 </package>
