@@ -1,5 +1,10 @@
 # I18NFormatter release notes
 
+## 6.0.0 (2025-09-05)
+
+* Update to .NET 8 and Rhetos 6.
+* GetTranslatableStrings CLI utility migrated from .NET Framework 4.7.2 to .NET 8.
+
 ## 5.0.0 (2022-03-25)
 
 * Migrated from .NET Framework to .NET 5 and Rhetos 5.
