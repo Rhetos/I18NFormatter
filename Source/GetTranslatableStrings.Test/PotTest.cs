@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
@@ -17,22 +17,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace GetTranslatableStrings.Test
 {
-    [TestClass]
     public class PotTest
     {
-        [TestMethod]
+        [Fact]
         public void EscapeTest()
         {
-            Assert.AreEqual(@"""1\t2\r\n""", Pot.QuoteEscapeString("1\t2\r\n"));
+            Assert.Equal(@"""1\t2\r\n""", Pot.QuoteEscapeString("1\t2\r\n"));
         }
     }
 }

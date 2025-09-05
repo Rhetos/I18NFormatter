@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
@@ -17,14 +17,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace GetTranslatableStrings.Test
 {
-    [TestClass]
     public class ParserTest
     {
         List<TranslatableString> Parse(string code)
@@ -34,24 +28,24 @@ namespace GetTranslatableStrings.Test
             return testParser.GetStrings();
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseEmpty()
         {
-            Assert.AreEqual(0, Parse("").Count);
+            Assert.Empty(Parse(""));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseSimple()
         {
             var translatable = Parse("int main()\n{ _localizer[\"abc\"]; }").Single();
-            Assert.AreEqual("_localizer[\"abc\"]", translatable.Context);
-            Assert.AreEqual(2, translatable.Line);
-            Assert.AreEqual(3, translatable.Column);
-            Assert.AreEqual("abc", translatable.Text);
+            Assert.Equal("_localizer[\"abc\"]", translatable.Context);
+            Assert.Equal(2, translatable.Line);
+            Assert.Equal(3, translatable.Column);
+            Assert.Equal("abc", translatable.Text);
         }
 
-        [TestMethod]
-        public void ParseExcapes()
+        [Fact]
+        public void ParseEscapes()
         {
             var tests = new Dictionary<string, string>
             {
@@ -65,36 +59,36 @@ namespace GetTranslatableStrings.Test
 
             var translatables = Parse(source);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 string.Join("|", tests.Values),
                 string.Join("|", translatables.Select(t => t.Text)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseAlreadyInternationalized()
         {
             var t = Parse("int main()\n{ string localized = \"a\"; new UserException(localized); }").Single();
-            Assert.AreEqual("Ignored, already internationalized.", t.Error);
+            Assert.Equal("Ignored, already internationalized.", t.Error);
 
             t = Parse("int main()\n{ new UserException(\"[[[abc]]]\"); }").Single();
-            Assert.AreEqual("Ignored, already internationalized.", t.Error);
+            Assert.Equal("Ignored, already internationalized.", t.Error);
 
             t = Parse("int main()\n{ _localizer[\"[[[abc]]]\"]; }").Single();
-            Assert.AreEqual("Ignored, already internationalized.", t.Error);
+            Assert.Equal("Ignored, already internationalized.", t.Error);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseIgnoreTests()
         {
             var t = Parse("int main()\n{ new UserException(\"some [Test] code\"); }").Single();
-            Assert.AreEqual("Ignored test.", t.Error);
+            Assert.Equal("Ignored test.", t.Error);
         }
 
-        [TestMethod]
+        [Fact]
         public void CustomInvalidDataMessage()
         {
             var translatable = Parse("int main()\n{ new InvalidDataMessage { ID = Guid.NewGuid(), Message = \"Invalid {0} because {1}.\", MessageParameters = new object[] { 1, 2 } }; }").Single();
-            Assert.AreEqual("Invalid {0} because {1}.", translatable.Text);
+            Assert.Equal("Invalid {0} because {1}.", translatable.Text);
         }
 
     }

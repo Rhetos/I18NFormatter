@@ -8,9 +8,7 @@ SET Prerelease=auto
 REM Updating the build version.
 PowerShell -ExecutionPolicy ByPass .\Tools\Build\ChangeVersion.ps1 %Version% %Prerelease% || GOTO Error0
 
-CALL Tools\Build\FindVisualStudio.bat || GOTO Error0
-
-MSBuild /t:restore /t:rebuild /p:Configuration=%Config% /p:RhetosDeploy=false /verbosity:minimal /fileLogger || GOTO Error0
+dotnet build --configuration %Config% -p:RhetosDeploy=false || GOTO Error0
 
 IF NOT EXIST Install MD Install
 DEL /F /S /Q Install\* || GOTO Error0
