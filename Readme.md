@@ -3,7 +3,7 @@
 I18NFormatter is a plugin package for [Rhetos development platform](https://github.com/Rhetos/Rhetos).
 It enables localization of Rhetos applications, using message format compatible with <https://github.com/turquoiseowl/i18n>.
 
-**Note that [turquoiseowl/i18n](https://github.com/turquoiseowl/i18n) currently supports only .NET Framework, and cannot be used directly in a Rhetos v5 app:**
+**Note that [turquoiseowl/i18n](https://github.com/turquoiseowl/i18n) currently supports only .NET Framework, and cannot be used directly in a Rhetos v5 app or later:**
 
 1. You can still use turquoiseowl/i18n if you have the localization implemented in a **separate "frontend" app, for example on ASP.NET MVC**, that acts as a proxy for Rhetos REST services. In that case, add Rhetos.I18NFormatter package to the Rhetos app in order to make its messages formatted for localization that occurs in the frontend app.
 2. If you want **localization implemented directly in the Rhetos app**, instead of I18NFormatter package and turquoiseowl/i18n, use any ASP.NET Core localization utility, by configuring Rhetos host with `.AddHostLocalization()`.

@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (C) 2014 Omega software d.o.o.
 
     This file is part of Rhetos.
@@ -91,15 +91,15 @@ namespace GetTranslatableStrings
 
         private static ValueOrError<string> TryGetStringParameter(SyntaxNode node, string[] names, SyntaxKind kind, SyntaxKind childKind, Func<SyntaxNode, ValueOrError<string>> extractArgument)
         {
-            if (node.Kind() == kind)
+            if (node.IsKind(kind))
             {
                 var childNodes = node.ChildNodes().ToList();
 
                 if (childNodes.Count >= 2
-                    && (childNodes[0].Kind() == SyntaxKind.IdentifierName || childNodes[0].Kind() == SyntaxKind.QualifiedName)
+                    && (childNodes[0].IsKind(SyntaxKind.IdentifierName) || childNodes[0].IsKind(SyntaxKind.QualifiedName))
                     && names.Contains(childNodes[0].ToString()))
                 {
-                    if (childNodes[1].Kind() != childKind)
+                    if (!childNodes[1].IsKind(childKind))
                         return ValueOrError.CreateError("Unexpected argument '" + childNodes[1].Kind() + "', expecting " + childKind + ".");
 
                     return extractArgument(childNodes[1]);
@@ -113,7 +113,7 @@ namespace GetTranslatableStrings
             var firstArgument = childNode.ChildNodes().FirstOrDefault();
             if (firstArgument == null)
                 return ValueOrError.CreateError("Unexpected usage without arguments.");
-            if (firstArgument.Kind() != SyntaxKind.Argument)
+            if (!firstArgument.IsKind(SyntaxKind.Argument))
                 return ValueOrError.CreateError("Unexpected child argument '" + firstArgument.Kind() + "', expecting " + SyntaxKind.Argument + ".");
 
             var firstArgumentExpression = firstArgument.ChildNodes().FirstOrDefault();
@@ -121,7 +121,7 @@ namespace GetTranslatableStrings
                 return ValueOrError.CreateError("Unexpected child without arguments.");
             if (new[] { SyntaxKind.NullLiteralExpression, SyntaxKind.NumericLiteralExpression }.Contains(firstArgumentExpression.Kind()))
                 return ValueOrError.CreateError("Ignored " + firstArgumentExpression.Kind() + ".");
-            if ((firstArgumentExpression.Kind() == SyntaxKind.IdentifierName || firstArgumentExpression.Kind() == SyntaxKind.IdentifierName)
+            if ((firstArgumentExpression.IsKind(SyntaxKind.IdentifierName) || firstArgumentExpression.IsKind(SyntaxKind.IdentifierName))
                 && firstArgumentExpression.ToString().StartsWith("localized"))
                 return ValueOrError.CreateError("Ignored, already internationalized.");
 
@@ -138,7 +138,7 @@ namespace GetTranslatableStrings
 
         private static ValueOrError<string> TryGetStringAssignment(SyntaxNode node, string variableName)
         {
-            if (node.Kind() == SyntaxKind.VariableDeclarator)
+            if (node.IsKind(SyntaxKind.VariableDeclarator))
             {
                 var declarator = (VariableDeclaratorSyntax)node;
                 if (declarator.Identifier.ValueText == "invalidData_Description")
@@ -152,7 +152,7 @@ namespace GetTranslatableStrings
             if (textValue.ToString().IndexOf("[Test]", StringComparison.OrdinalIgnoreCase) >= 0)
                 return ValueOrError.CreateError("Ignored test.");
 
-            if (textValue.Kind() != SyntaxKind.StringLiteralExpression)
+            if (!textValue.IsKind(SyntaxKind.StringLiteralExpression))
                 return ValueOrError.CreateError("Unsupported " + errorContext + " " + textValue.Kind() + ".");
 
             var textValueToken = textValue.ChildTokens().Single();
