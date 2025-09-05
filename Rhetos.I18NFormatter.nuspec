@@ -8,6 +8,7 @@
     <license type="expression">AGPL-3.0-only</license>
     <projectUrl>https://github.com/rhetos/rhetos</projectUrl>
     <description>I18NFormatter is a plugin for Rhetos development platform. It enables localization of Rhetos applications, using message format compatible with https://github.com/turquoiseowl/i18n.</description>
+    <readme>docs\Readme.md</readme>
     <copyright>Copyright Omega software 2015</copyright>
     <tags>Rhetos plugin</tags>
     <dependencies>
@@ -15,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Readme.md" target="" />
+    <file src="Readme.md" target="docs" />
     <file src="ChangeLog.md" target="" />
     <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.pdb" target="lib\net5.0" />
     <file src="Source\Rhetos.I18NFormatter\bin\Debug\net5.0\Rhetos.I18NFormatter.dll" target="lib\net5.0" />
